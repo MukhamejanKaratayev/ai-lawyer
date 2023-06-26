@@ -4,7 +4,6 @@ import { Configuration, OpenAIApi } from 'openai-edge'
 
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
-
 export const runtime = 'edge'
 
 const configuration = new Configuration({
@@ -28,6 +27,7 @@ export async function POST(req: Request) {
     configuration.apiKey = previewToken
   }
 
+  
   const res = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
     messages,
