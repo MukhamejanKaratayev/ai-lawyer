@@ -14,20 +14,42 @@ const openai = new OpenAIApi(configuration)
 
 export async function POST(req: Request) {
   const json = await req.json()
-  const { messages, previewToken } = json
+  let { messages, previewToken } = json
   const session = await auth()
-
+  const question = messages[messages.length-1].content;
   if (session == null) {
     return new Response('Unauthorized', {
       status: 401
     })
   }
 
+  const result = await fetch('http://127.0.0.1:8000/get_context?message='+question)
+
+  if (!result.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error('Failed to fetch data')
+  }
+  const {page_content} = await result.json();
+
+  const template =
+      `You are a legal affairs assistant for a \\
+      financing company. \\
+      Based on the context, respond in a friendly and helpful tone. \\
+      with very concise answers. \\
+      Double-check your responses for accuracy and coherence. \\
+      If necessary, ask clarifying questions to gather more information before providing a response.\\
+      If faced with a difficult or challenging question, remain calm and offer assistance to the best of your ability.\\
+      Context:\\n${page_content}\\n
+      If it is not in the context, say that you haven't information \\
+      Question: ${question}`
+
+
+  messages[messages.length-1].content = template;
+
+
   if (previewToken) {
     configuration.apiKey = previewToken
   }
-
-  
   const res = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
     messages,
@@ -57,11 +79,11 @@ export async function POST(req: Request) {
             }
           ]
         }
-        await kv.hmset(`chat:${id}`, payload)
-        await kv.zadd(`user:chat:${userId}`, {
-          score: createdAt,
-          member: `chat:${id}`
-        })
+        // await kv.hmset(`chat:${id}`, payload)
+        // await kv.zadd(`user:chat:${userId}`, {
+        //   score: createdAt,
+        //   member: `chat:${id}`
+        // })
       }
     }
   })

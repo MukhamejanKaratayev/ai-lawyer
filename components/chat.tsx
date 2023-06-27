@@ -2,6 +2,9 @@
 
 import { useChat, type Message } from 'ai/react'
 
+
+
+
 import { cn } from '@/lib/utils'
 import { ChatList } from '@/components/chat-list'
 import { ChatPanel } from '@/components/chat-panel'
@@ -34,19 +37,19 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   )
   const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW)
   const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? '')
-  const { messages, append, reload, stop, isLoading, input, setInput } =
+  const {messages, append, reload, stop, isLoading, input, setInput } =
     useChat({
-      initialMessages,
-      id,
-      body: {
+        initialMessages,
         id,
-        previewToken
-      },
-      onResponse(response) {
-        if (response.status === 401) {
-          toast.error(response.statusText)
+        body: {
+            id,
+            previewToken
+        },
+        onResponse(response) {
+            if (response.status == 401) {
+                toast(response.statusText);
+            }
         }
-      }
     })
   return (
     <>
