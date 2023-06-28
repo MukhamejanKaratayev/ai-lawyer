@@ -46,12 +46,12 @@ export async function POST(req: Request) {
 
   messages[messages.length-1].content = template;
 
-
+  // console.log(messages)
   if (previewToken) {
     configuration.apiKey = previewToken
   }
   const res = await openai.createChatCompletion({
-    model: 'gpt-3.5-turbo',
+    model: 'gpt-3.5-turbo-0613',
     messages,
     temperature: 0.7,
     stream: true
