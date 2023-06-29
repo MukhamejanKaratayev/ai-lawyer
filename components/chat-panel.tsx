@@ -5,6 +5,8 @@ import { PromptForm } from '@/components/prompt-form'
 import { ButtonScrollToBottom } from '@/components/button-scroll-to-bottom'
 import { IconRefresh, IconStop } from '@/components/ui/icons'
 import { FooterText } from '@/components/footer'
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
+import Dictaphone from './dictophone'
 
 export interface ChatPanelProps
   extends Pick<
@@ -58,6 +60,7 @@ export function ChatPanel({
           )}
         </div>
         <div className="space-y-4 border-t bg-background px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">
+          {/* <Dictaphone /> */}
           <PromptForm
             onSubmit={async value => {
                 await append({

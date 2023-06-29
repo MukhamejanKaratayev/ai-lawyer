@@ -11,7 +11,9 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip'
-import { IconArrowElbow, IconPlus } from '@/components/ui/icons'
+import { IconArrowElbow, IconOpenAI, IconPlus } from '@/components/ui/icons'
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { MouseEventHandler } from 'react'
 
 export interface PromptProps
   extends Pick<UseChatHelpers, 'input' | 'setInput'> {
@@ -33,6 +35,25 @@ export function PromptForm({
       inputRef.current.focus()
     }
   }, [])
+
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition
+  } = useSpeechRecognition();
+
+  if (!browserSupportsSpeechRecognition) {
+    return <span>Browser doesn't support speech recognition.</span>;
+  }
+
+  React.useEffect(() => {
+    if (transcript) {
+      setInput(transcript)
+      // resetTranscript()
+    }
+  }, [transcript])
+
 
   return (
     <form
@@ -56,12 +77,13 @@ export function PromptForm({
                 'absolute left-0 top-4 h-8 w-8 rounded-full bg-background p-0 sm:left-4'
               )}
             >
-              <IconPlus />
+              <IconPlus onClick={SpeechRecognition.startListening as MouseEventHandler<SVGSVGElement>} />
               <span className="sr-only">New Chat</span>
             </Link>
           </TooltipTrigger>
           <TooltipContent>New Chat</TooltipContent>
         </Tooltip>
+        
         <Textarea
           ref={inputRef}
           tabIndex={0}
