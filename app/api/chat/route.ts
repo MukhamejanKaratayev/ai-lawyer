@@ -4,6 +4,9 @@ import { Configuration, OpenAIApi } from 'openai-edge'
 
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
+import { Milvus } from "langchain/vectorstores/milvus";
+import { OpenAIEmbeddings } from "langchain/embeddings/openai";
+
 export const runtime = 'edge'
 
 const configuration = new Configuration({
@@ -22,6 +25,17 @@ export async function POST(req: Request) {
       status: 401
     })
   }
+
+  // const vectorStore = await Milvus.fromExistingCollection(
+  //   new OpenAIEmbeddings(),
+  //   {
+  //     collectionName: "afsaindextest",
+  //     url: "https://in01-5c83064561b8fa7.aws-us-west-2.vectordb.zillizcloud.com:19533",
+  //     ssl: true,
+  //     username: "db_admin",
+  //     password: "urVcsBEaw7ZYvsf",
+  //   }
+  // );
 
   const result = await fetch('http://127.0.0.1:8000/get_context?message='+question)
 

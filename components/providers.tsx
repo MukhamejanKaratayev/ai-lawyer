@@ -8,8 +8,12 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 
 export function Providers({ children, ...props }: ThemeProviderProps) {
   return (
+    
     <NextThemesProvider {...props}>
-      <TooltipProvider>{children}</TooltipProvider>
+      
+      <TooltipProvider>
+        {children}
+      </TooltipProvider>
     </NextThemesProvider>
   )
 }
