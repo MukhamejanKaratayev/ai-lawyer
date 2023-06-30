@@ -68,10 +68,10 @@ export async function POST(req: Request) {
         Context:\\n${page_content}\\n
         If it is not in the context, say that you haven't information and try to appologise \\`
 
-    template += template_with_context;
+    template += template_with_context + template_footer;
   }
 
-
+  console.log(template)
   messages[messages.length-1].content = template;
 
   if (previewToken) {
