@@ -2,7 +2,7 @@ import * as React from 'react'
 import Link from 'next/link'
 import Textarea from 'react-textarea-autosize'
 import { UseChatHelpers } from 'ai/react'
-
+import 'regenerator-runtime'
 import { useEnterSubmit } from '@/lib/hooks/use-enter-submit'
 import { cn } from '@/lib/utils'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -11,7 +11,7 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip'
-import { IconArrowElbow, IconOpenAI, IconPlus } from '@/components/ui/icons'
+import {IconArrowElbow, IconMicrophone, IconOpenAI, IconPlus} from '@/components/ui/icons'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { MouseEventHandler } from 'react'
 
@@ -56,6 +56,7 @@ export function PromptForm({
 
 
   return (
+      <div>
     <form
       onSubmit={async e => {
         e.preventDefault()
@@ -77,8 +78,8 @@ export function PromptForm({
                 'absolute left-0 top-4 h-8 w-8 rounded-full bg-background p-0 sm:left-4'
               )}
             >
-              <IconPlus onClick={SpeechRecognition.startListening as MouseEventHandler<SVGSVGElement>} />
-              <span className="sr-only">New Chat</span>
+              <IconMicrophone onClick={SpeechRecognition.startListening as MouseEventHandler<SVGSVGElement>} />
+              <span className="sr-only">Use microphone</span>
             </Link>
           </TooltipTrigger>
           <TooltipContent>New Chat</TooltipContent>
@@ -112,5 +113,6 @@ export function PromptForm({
         </div>
       </div>
     </form>
+      </div>
   )
 }

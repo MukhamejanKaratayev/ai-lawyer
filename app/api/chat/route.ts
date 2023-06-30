@@ -4,8 +4,14 @@ import { Configuration, OpenAIApi } from 'openai-edge'
 
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
-import { Milvus } from "langchain/vectorstores/milvus";
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
+
+interface ContextResponse {
+  page_content: string,
+  metadata: {
+    source: string,
+    page: number | undefined
+  }
+}
 
 export const runtime = 'edge'
 
@@ -26,41 +32,48 @@ export async function POST(req: Request) {
     })
   }
 
-  // const vectorStore = await Milvus.fromExistingCollection(
-  //   new OpenAIEmbeddings(),
-  //   {
-  //     collectionName: "afsaindextest",
-  //     url: "https://in01-5c83064561b8fa7.aws-us-west-2.vectordb.zillizcloud.com:19533",
-  //     ssl: true,
-  //     username: "db_admin",
-  //     password: "urVcsBEaw7ZYvsf",
-  //   }
-  // );
-
-  const result = await fetch('http://127.0.0.1:8000/get_context?message='+question)
+  // Context Gathering
+  const result = await fetch('http://127.0.0.1:2000/get_context?message='+question)
 
   if (!result.ok) {
     // This will activate the closest `error.js` Error Boundary
     throw new Error('Failed to fetch data')
   }
-  const {page_content} = await result.json();
+  const response = await result.json() as ContextResponse[];
 
-  const template =
+  const template_base =
       `You are a legal affairs assistant for a \\
       financing company. \\
-      Based on the context, respond in a friendly and helpful tone. \\
-      with very concise answers. \\
+      Don't tell anything about context!
       Double-check your responses for accuracy and coherence. \\
       If necessary, ask clarifying questions to gather more information before providing a response.\\
       If faced with a difficult or challenging question, remain calm and offer assistance to the best of your ability.\\
-      Context:\\n${page_content}\\n
-      If it is not in the context, say that you haven't information \\
-      Question: ${question}`
+      `
+
+  const template_footer = `Question: ${question}`
+
+  let template = template_base;
+
+  if (response.length > 0) {
+    // pre-requirement for sources gathering
+    const sources = response.map((element: ContextResponse) => element.metadata.source)
+    const page_content =
+        response
+            .map((element: ContextResponse) => element.page_content)
+            .join("\n")
+
+    const template_with_context =
+        `Based on the context, respond in a friendly and helpful tone. \\
+        with very concise answers. \\
+        Context:\\n${page_content}\\n
+        If it is not in the context, say that you haven't information and try to appologise \\`
+
+    template += template_with_context;
+  }
 
 
   messages[messages.length-1].content = template;
 
-  // console.log(messages)
   if (previewToken) {
     configuration.apiKey = previewToken
   }
