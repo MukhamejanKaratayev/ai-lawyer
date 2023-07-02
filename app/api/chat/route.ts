@@ -33,7 +33,7 @@ export async function POST(req: Request) {
   }
 
   // Context Gathering
-  const result = await fetch('http://127.0.0.1:2000/get_context?message='+question)
+  const result = await fetch('http://127.0.0.1:8000/get_context?message='+question)
 
   if (!result.ok) {
     // This will activate the closest `error.js` Error Boundary
@@ -41,16 +41,23 @@ export async function POST(req: Request) {
   }
   const response = await result.json() as ContextResponse[];
 
-  const template_base =
-      `You are a legal affairs assistant for a \\
-      financing company. \\
-      Don't tell anything about context!
-      Double-check your responses for accuracy and coherence. \\
-      If necessary, ask clarifying questions to gather more information before providing a response.\\
-      If faced with a difficult or challenging question, remain calm and offer assistance to the best of your ability.\\
-      `
+  // const template_base =
+  //     `You are a legal affairs assistant for a \\
+  //     financing company. \\
+  //     Don't tell anything about context!
+  //     Double-check your responses for accuracy and coherence. \\
+  //     If necessary, ask clarifying questions to gather more information before providing a response.\\
+  //     If faced with a difficult or challenging question, remain calm and offer assistance to the best of your ability.\\
+  //     `
 
-  const template_footer = `Question: ${question}`
+  // const template_footer = `Question: ${question}`
+
+  // Тщательно проверяйте свои ответы на точность и последовательность. Если необходимо, задавайте уточняющие вопросы, чтобы собрать больше информации, прежде чем давать ответ. Если вы столкнулись с трудным или сложным вопросом, оставайтесь спокойными и оказывайте помощь по мере своих возможностей
+  const template_base =
+  `Вы являетесь полезным AI-ассистентом электронного правительства (eGov).`
+
+  const template_footer = `Вопрос: ${question}
+  Полезный ответ в формате markdown:`
 
   let template = template_base;
 
@@ -62,11 +69,15 @@ export async function POST(req: Request) {
             .map((element: ContextResponse) => element.page_content)
             .join("\n")
 
+    // const template_with_context =
+    //     `Based on the context, respond in a friendly and helpful tone. \\
+    //     with very concise answers. \\
+    //     Context:\\n${page_content}\\n
+    //     If it is not in the context, say that you haven't information and try to appologise \\`
     const template_with_context =
-        `Based on the context, respond in a friendly and helpful tone. \\
-        with very concise answers. \\
-        Context:\\n${page_content}\\n
-        If it is not in the context, say that you haven't information and try to appologise \\`
+        `Используйте следующие контекстные данные для ответа на вопрос в конце. Если вы не знаете ответа, просто скажите, что не знаете. НЕ пытайтесь придумать ответ. Если вопрос не связан с контекстом, вежливо ответьте, что вы настроены отвечать только на вопросы, связанные с контекстом.
+
+        ${page_content}`
 
     template += template_with_context + template_footer;
   }

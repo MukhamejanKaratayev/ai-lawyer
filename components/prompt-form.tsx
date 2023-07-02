@@ -54,9 +54,10 @@ export function PromptForm({
     }
   }, [transcript])
 
+  const startListening = () => SpeechRecognition.startListening({ language: 'ru' });
+
 
   return (
-      <div>
     <form
       onSubmit={async e => {
         e.preventDefault()
@@ -78,11 +79,23 @@ export function PromptForm({
                 'absolute left-0 top-4 h-8 w-8 rounded-full bg-background p-0 sm:left-4'
               )}
             >
-              <IconMicrophone onClick={SpeechRecognition.startListening as MouseEventHandler<SVGSVGElement>} />
-              <span className="sr-only">Use microphone</span>
+              {!listening ? (
+                <>
+                <IconMicrophone onClick={startListening} />
+                <span className="sr-only">Use microphone</span>
+                </>
+              ) : (
+                // loading spinner animation below
+                <svg className="animate-spin h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+                
+              )}
+              
             </Link>
           </TooltipTrigger>
-          <TooltipContent>New Chat</TooltipContent>
+          <TooltipContent>Ввод голосом</TooltipContent>
         </Tooltip>
         
         <Textarea
@@ -113,6 +126,5 @@ export function PromptForm({
         </div>
       </div>
     </form>
-      </div>
   )
 }
