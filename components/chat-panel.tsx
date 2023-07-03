@@ -49,7 +49,7 @@ export function ChatPanel({
     <div className="fixed inset-x-0 bottom-0 bg-gradient-to-b from-muted/10 from-10% to-muted/30 to-50%">
       <ButtonScrollToBottom />
       <div className="mx-auto sm:max-w-2xl sm:px-4">
-        <div className={`flex ${isLoading || link == '' ? 'h-10' : 'h-26'} items-center justify-center`}>
+        <div className={`flex ${isLoading || link == '' ? 'h-10' : 'h-28'} items-center justify-center`}>
           {isLoading ? (
             <Button
               variant="outline"

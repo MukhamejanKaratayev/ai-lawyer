@@ -76,8 +76,8 @@ export async function POST(req: Request) {
     //     If it is not in the context, say that you haven't information and try to appologise \\`
 
     template += templateWithContext + templateFooter;
-    console.log(template);
-    console.log(source)
+    // console.log(template);
+    // console.log(source)
     messages[messages.length - 1].content = template;
   }
 

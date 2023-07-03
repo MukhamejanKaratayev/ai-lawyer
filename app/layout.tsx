@@ -1,3 +1,4 @@
+// import 'regenerator-runtime/runtime'
 import { Metadata } from 'next'
 
 import { Toaster } from 'react-hot-toast'
