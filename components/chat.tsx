@@ -37,19 +37,19 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   )
   const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW)
   const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? '')
-  const {messages, append, reload, stop, isLoading, input, setInput } =
+  const { messages, append, reload, stop, isLoading, input, setInput } =
     useChat({
-        initialMessages,
+      initialMessages,
+      id,
+      body: {
         id,
-        body: {
-            id,
-            previewToken
-        },
-        onResponse(response) {
-            if (response.status == 401) {
-                toast(response.statusText);
-            }
+        previewToken
+      },
+      onResponse(response) {
+        if (response.status == 401) {
+          toast(response.statusText);
         }
+      }
     })
   return (
     <>
@@ -108,7 +108,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
             >
               Save Token
             </Button>
-          </DialogFooter>
+          </DialogFooter>;
         </DialogContent>
       </Dialog>
     </>

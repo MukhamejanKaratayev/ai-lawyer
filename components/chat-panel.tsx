@@ -10,14 +10,14 @@ import Dictaphone from './dictophone'
 
 export interface ChatPanelProps
   extends Pick<
-    UseChatHelpers,
-    | 'append'
-    | 'isLoading'
-    | 'reload'
-    | 'messages'
-    | 'stop'
-    | 'input'
-    | 'setInput'
+  UseChatHelpers,
+  | 'append'
+  | 'isLoading'
+  | 'reload'
+  | 'messages'
+  | 'stop'
+  | 'input'
+  | 'setInput'
   > {
   id?: string
 }
@@ -36,7 +36,7 @@ export function ChatPanel({
     <div className="fixed inset-x-0 bottom-0 bg-gradient-to-b from-muted/10 from-10% to-muted/30 to-50%">
       <ButtonScrollToBottom />
       <div className="mx-auto sm:max-w-2xl sm:px-4">
-        <div className="flex h-10 items-center justify-center">
+        <div className="flex h-20 items-center justify-center">
           {isLoading ? (
             <Button
               variant="outline"
@@ -48,14 +48,18 @@ export function ChatPanel({
             </Button>
           ) : (
             messages?.length > 0 && (
-              <Button
-                variant="outline"
-                onClick={() => reload()}
-                className="bg-background"
-              >
-                <IconRefresh className="mr-2" />
-                Regenerate response
-              </Button>
+              <div className='flex flex-col'>
+                <Button
+                  variant="outline"
+                  onClick={() => reload()}
+                  className="bg-background"
+                >
+                  <IconRefresh className="mr-2" />
+                  Regenerate response
+                </Button>
+                <Button variant="link">
+                  Hello World</Button>
+              </div>
             )
           )}
         </div>
@@ -63,10 +67,10 @@ export function ChatPanel({
           {/* <Dictaphone /> */}
           <PromptForm
             onSubmit={async value => {
-                await append({
-                    content: value,
-                    role: "user",
-                })
+              await append({
+                content: value,
+                role: "user",
+              })
             }}
             input={input}
             setInput={setInput}
