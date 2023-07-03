@@ -25,7 +25,7 @@ export async function POST(req: Request) {
   const json = await req.json()
   let { messages, previewToken } = json
   const session = await auth()
-  const question = messages[messages.length-1].content;
+  const question = messages[messages.length - 1].content;
   if (session == null) {
     return new Response('Unauthorized', {
       status: 401
@@ -33,57 +33,36 @@ export async function POST(req: Request) {
   }
 
   // Context Gathering
-  const result = await fetch('http://127.0.0.1:8000/get_context?message='+question)
+  const result = await fetch('http://127.0.0.1:8000/get_context?message=' + question)
 
   if (!result.ok) {
     // This will activate the closest `error.js` Error Boundary
     throw new Error('Failed to fetch data')
   }
-  const response = await result.json() as ContextResponse[];
+  const response = await result.json() as ContextResponse;
 
-  // const template_base =
-  //     `You are a legal affairs assistant for a \\
-  //     financing company. \\
-  //     Don't tell anything about context!
-  //     Double-check your responses for accuracy and coherence. \\
-  //     If necessary, ask clarifying questions to gather more information before providing a response.\\
-  //     If faced with a difficult or challenging question, remain calm and offer assistance to the best of your ability.\\
-  //     `
+  const templateBase = `Вы являетесь полезным AI-ассистентом электронного правительства (eGov).`;
 
-  // const template_footer = `Question: ${question}`
+  const templateFooter = `Вопрос: ${question}\nПолезный ответ в формате markdown:`;
 
-  // Тщательно проверяйте свои ответы на точность и последовательность. Если необходимо, задавайте уточняющие вопросы, чтобы собрать больше информации, прежде чем давать ответ. Если вы столкнулись с трудным или сложным вопросом, оставайтесь спокойными и оказывайте помощь по мере своих возможностей
-  const template_base =
-  `Вы являетесь полезным AI-ассистентом электронного правительства (eGov).`
+  let template = templateBase;
 
-  const template_footer = `Вопрос: ${question}
-  Полезный ответ в формате markdown:`
+  if (response) {
+    const { page_content, metadata } = response;
+    const { source } = metadata;
 
-  let template = template_base;
+    const templateWithContext = `
+    Используйте следующие контекстные данные для ответа на вопрос в конце. Если вы не знаете ответа, просто скажите, что не знаете. НЕ пытайтесь придумать ответ. Если вопрос не связан с контекстом, вежливо ответьте, что вы настроены отвечать только на вопросы, связанные с контекстом.
 
-  if (response.length > 0) {
-    // pre-requirement for sources gathering
-    const sources = response.map((element: ContextResponse) => element.metadata.source)
-    const page_content =
-        response
-            .map((element: ContextResponse) => element.page_content)
-            .join("\n")
+    ${page_content}
+  `;
 
-    // const template_with_context =
-    //     `Based on the context, respond in a friendly and helpful tone. \\
-    //     with very concise answers. \\
-    //     Context:\\n${page_content}\\n
-    //     If it is not in the context, say that you haven't information and try to appologise \\`
-    const template_with_context =
-        `Используйте следующие контекстные данные для ответа на вопрос в конце. Если вы не знаете ответа, просто скажите, что не знаете. НЕ пытайтесь придумать ответ. Если вопрос не связан с контекстом, вежливо ответьте, что вы настроены отвечать только на вопросы, связанные с контекстом.
-
-        ${page_content}`
-
-    template += template_with_context + template_footer;
+    template += templateWithContext + templateFooter;
+    console.log(template);
+    messages[messages.length - 1].content = template;
   }
 
-  console.log(template)
-  messages[messages.length-1].content = template;
+
 
   if (previewToken) {
     configuration.apiKey = previewToken
