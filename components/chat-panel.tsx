@@ -3,10 +3,12 @@ import { type UseChatHelpers } from 'ai/react'
 import { Button } from '@/components/ui/button'
 import { PromptForm } from '@/components/prompt-form'
 import { ButtonScrollToBottom } from '@/components/button-scroll-to-bottom'
-import { IconRefresh, IconStop } from '@/components/ui/icons'
+import { IconArrowRight, IconRefresh, IconStop } from '@/components/ui/icons'
 import { FooterText } from '@/components/footer'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import Dictaphone from './dictophone'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 export interface ChatPanelProps
   extends Pick<
@@ -32,11 +34,22 @@ export function ChatPanel({
   setInput,
   messages
 }: ChatPanelProps) {
+  const [link, setLink] = useState('')
+  const setLinkHandler = (text: string) => {
+    const urlRegex = /\((https?:\/\/[^\s]+)\)/;
+    const match = text.match(urlRegex);
+    if (match && match[1] && match[1].includes('services')) setLink(match[1]);
+  }
+  useEffect(() => {
+    if (!isLoading && messages?.length > 0) {
+      setLinkHandler(messages.filter((msg: any) => msg.role == 'assistant').slice(-1)[0].content)
+    }
+  }, [isLoading, messages])
   return (
     <div className="fixed inset-x-0 bottom-0 bg-gradient-to-b from-muted/10 from-10% to-muted/30 to-50%">
       <ButtonScrollToBottom />
       <div className="mx-auto sm:max-w-2xl sm:px-4">
-        <div className="flex h-20 items-center justify-center">
+        <div className={`flex ${isLoading || link == '' ? 'h-10' : 'h-26'} items-center justify-center`}>
           {isLoading ? (
             <Button
               variant="outline"
@@ -48,8 +61,18 @@ export function ChatPanel({
             </Button>
           ) : (
             messages?.length > 0 && (
-              <div className='flex flex-col'>
+              <div className='flex flex-col space-y-2'>
+                {/* <p>{JSON.stringify(messages.filter((msg:any) => msg.role == 'assistant')[0].content)}</p> */}
+                {link != '' && (
+                <Link href={link}>
+                <Button size='lg' variant="link" className='bg-[#0a8323] text-white uppercase'>
+                  <IconArrowRight className="mr-2" />
+                  Заказать услугу онлайн
+                </Button>
+                </Link>
+                )}
                 <Button
+                  // size='lg'
                   variant="outline"
                   onClick={() => reload()}
                   className="bg-background"
@@ -57,8 +80,6 @@ export function ChatPanel({
                   <IconRefresh className="mr-2" />
                   Regenerate response
                 </Button>
-                <Button variant="link">
-                  Hello World</Button>
               </div>
             )
           )}

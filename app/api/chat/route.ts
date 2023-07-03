@@ -112,6 +112,7 @@ export async function POST(req: Request) {
               role: 'assistant'
             }
           ]
+          
         }
         // await kv.hmset(`chat:${id}`, payload)
         // await kv.zadd(`user:chat:${userId}`, {

@@ -58,6 +58,7 @@ export function PromptForm({
 
 
   return (
+    <div>
     <form
       onSubmit={async e => {
         e.preventDefault()
@@ -72,8 +73,9 @@ export function PromptForm({
       <div className="relative flex max-h-60 w-full grow flex-col overflow-hidden bg-background px-8 sm:rounded-md sm:border sm:px-12">
         <Tooltip>
           <TooltipTrigger asChild>
-            <Link
-              href="/"
+            <div
+
+              onClick={startListening}
               className={cn(
                 buttonVariants({ size: 'sm', variant: 'outline' }),
                 'absolute left-0 top-4 h-8 w-8 rounded-full bg-background p-0 sm:left-4'
@@ -81,7 +83,7 @@ export function PromptForm({
             >
               {!listening ? (
                 <>
-                <IconMicrophone onClick={startListening} />
+                <IconMicrophone />
                 <span className="sr-only">Use microphone</span>
                 </>
               ) : (
@@ -93,7 +95,7 @@ export function PromptForm({
                 
               )}
               
-            </Link>
+            </div>
           </TooltipTrigger>
           <TooltipContent>Ввод голосом</TooltipContent>
         </Tooltip>
@@ -105,7 +107,8 @@ export function PromptForm({
           rows={1}
           value={input}
           onChange={e => setInput(e.target.value)}
-          placeholder="Ask a question."
+          // Ask a question
+          placeholder="Задать вопрос..."
           spellCheck={false}
           className="min-h-[60px] w-full resize-none bg-transparent px-4 py-[1.3rem] focus-within:outline-none sm:text-sm"
         />
@@ -126,5 +129,6 @@ export function PromptForm({
         </div>
       </div>
     </form>
+    </div>
   )
 }

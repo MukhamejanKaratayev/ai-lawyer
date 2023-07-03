@@ -56,7 +56,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
       <div className={cn('pb-[200px] pt-4 md:pt-10', className)}>
         {/* <p className='text-center'>{messages.length}</p>
         <p className='text-center'>{isLoading.valueOf().toString()}</p> */}
-        {messages.length ? (
+        {messages.length || isLoading ? (
           <>
             <ChatList messages={messages} />
             <ChatScrollAnchor trackVisibility={isLoading} />
