@@ -40,7 +40,18 @@ export async function POST(req: Request) {
     throw new Error('Failed to fetch data')
   }
   const response = await result.json() as ContextResponse;
+  // const template_base =
+  //     `You are a legal affairs assistant for a \\
+  //     financing company. \\
+  //     Don't tell anything about context!
+  //     Double-check your responses for accuracy and coherence. \\
+  //     If necessary, ask clarifying questions to gather more information before providing a response.\\
+  //     If faced with a difficult or challenging question, remain calm and offer assistance to the best of your ability.\\
+  //     `
 
+  // const template_footer = `Question: ${question}`
+
+  // Тщательно проверяйте свои ответы на точность и последовательность. Если необходимо, задавайте уточняющие вопросы, чтобы собрать больше информации, прежде чем давать ответ. Если вы столкнулись с трудным или сложным вопросом, оставайтесь спокойными и оказывайте помощь по мере своих возможностей
   const templateBase = `Вы являетесь полезным AI-ассистентом электронного правительства (eGov).`;
 
   const templateFooter = `Вопрос: ${question}\nПолезный ответ в формате markdown:`;
@@ -55,14 +66,20 @@ export async function POST(req: Request) {
     Используйте следующие контекстные данные для ответа на вопрос в конце. Если вы не знаете ответа, просто скажите, что не знаете. НЕ пытайтесь придумать ответ. Если вопрос не связан с контекстом, вежливо ответьте, что вы настроены отвечать только на вопросы, связанные с контекстом.
 
     ${page_content}
+
+    Добавь ссылку под конец ответа: ${source}
   `;
+    // const template_with_context =
+    //     `Based on the context, respond in a friendly and helpful tone. \\
+    //     with very concise answers. \\
+    //     Context:\\n${page_content}\\n
+    //     If it is not in the context, say that you haven't information and try to appologise \\`
 
     template += templateWithContext + templateFooter;
     console.log(template);
+    console.log(source)
     messages[messages.length - 1].content = template;
   }
-
-
 
   if (previewToken) {
     configuration.apiKey = previewToken
