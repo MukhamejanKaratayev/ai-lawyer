@@ -33,7 +33,10 @@ export async function POST(req: Request) {
   }
 
   // Context Gathering
+  // console.log(messages)
   const result = await fetch('http://127.0.0.1:8000/get_context?message=' + question)
+
+  
 
   if (!result.ok) {
     // This will activate the closest `error.js` Error Boundary
@@ -85,7 +88,7 @@ export async function POST(req: Request) {
     configuration.apiKey = previewToken
   }
   const res = await openai.createChatCompletion({
-    model: 'gpt-3.5-turbo-0613',
+    model: 'gpt-3.5-turbo',
     messages,
     temperature: 0.7,
     stream: true
