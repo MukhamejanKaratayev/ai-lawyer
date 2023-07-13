@@ -64,7 +64,7 @@ export function ChatPanel({
               <div className='flex flex-col space-y-2'>
                 {/* <p>{JSON.stringify(messages.filter((msg:any) => msg.role == 'assistant')[0].content)}</p> */}
                 {link != '' && (
-                <Link href={link}>
+                <Link href={link} target="_blank" rel="nofollow">
                 <Button size='lg' variant="link" className='bg-[#0a8323] text-white uppercase'>
                   <IconArrowRight className="mr-2" />
                   Заказать услугу онлайн
