@@ -42,6 +42,7 @@ export function ChatPanel({
   }
   useEffect(() => {
     if (!isLoading && messages?.length > 0) {
+      setLink('')
       setLinkHandler(messages.filter((msg: any) => msg.role == 'assistant').slice(-1)[0].content)
     }
   }, [isLoading, messages])
@@ -49,7 +50,8 @@ export function ChatPanel({
     <div className="fixed inset-x-0 bottom-0 bg-gradient-to-b from-muted/10 from-10% to-muted/30 to-50%">
       <ButtonScrollToBottom />
       <div className="mx-auto sm:max-w-2xl sm:px-4">
-        <div className={`flex ${isLoading || link == '' ? 'h-10' : 'h-28'} items-center justify-center`}>
+        {/* before h-28 if link */}
+        <div className={`flex ${isLoading || link == '' ? 'h-10' : 'h-12'} items-center justify-center`}>
           {isLoading ? (
             <Button
               variant="outline"
@@ -61,16 +63,9 @@ export function ChatPanel({
             </Button>
           ) : (
             messages?.length > 0 && (
-              <div className='flex flex-col space-y-2'>
+              <div className='flex flex-row space-x-4'>
                 {/* <p>{JSON.stringify(messages.filter((msg:any) => msg.role == 'assistant')[0].content)}</p> */}
-                {link != '' && (
-                <Link href={link} target="_blank" rel="nofollow">
-                <Button size='lg' variant="link" className='bg-[#0a8323] text-white uppercase'>
-                  <IconArrowRight className="mr-2" />
-                  Заказать услугу онлайн
-                </Button>
-                </Link>
-                )}
+                
                 <Button
                   // size='lg'
                   variant="outline"
@@ -80,6 +75,15 @@ export function ChatPanel({
                   <IconRefresh className="mr-2" />
                   Regenerate response
                 </Button>
+
+                {link != '' && (
+                <Link href={link} target="_blank" rel="nofollow">
+                <Button size='sm' variant="link" className='bg-[#0a8323] text-[12px] text-white uppercase'>
+                  <IconArrowRight className="mr-2" />
+                  Заказать услугу онлайн
+                </Button>
+                </Link>
+                )}
               </div>
             )
           )}
