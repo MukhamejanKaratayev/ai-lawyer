@@ -42,10 +42,21 @@ export function ChatPanel({
   }
   useEffect(() => {
     if (!isLoading && messages?.length > 0) {
-      setLink('')
-      setLinkHandler(messages.filter((msg: any) => msg.role == 'assistant').slice(-1)[0].content)
+      console.log("Finished!!!");
+      setLink('');
+      const lastAssistantMessage = messages
+        .filter((msg) => msg.role === 'assistant')
+        .slice(-1)[0];
+
+      setLinkHandler(lastAssistantMessage.content);
+
+      // Text-to-speech part
+      const utterance = new SpeechSynthesisUtterance(lastAssistantMessage.content);
+      utterance.lang = 'ru-RU'; // Set the language code for Russian
+
+      speechSynthesis.speak(utterance);
     }
-  }, [isLoading, messages])
+  }, [isLoading, messages]);
   return (
     <div className="fixed inset-x-0 bottom-0 bg-gradient-to-b from-muted/10 from-10% to-muted/30 to-50%">
       <ButtonScrollToBottom />
@@ -65,7 +76,7 @@ export function ChatPanel({
             messages?.length > 0 && (
               <div className='flex flex-row space-x-4'>
                 {/* <p>{JSON.stringify(messages.filter((msg:any) => msg.role == 'assistant')[0].content)}</p> */}
-                
+
                 <Button
                   // size='lg'
                   variant="outline"
@@ -77,12 +88,12 @@ export function ChatPanel({
                 </Button>
 
                 {link != '' && (
-                <Link href={link} target="_blank" rel="nofollow">
-                <Button size='sm' variant="link" className='bg-[#0a8323] text-[12px] text-white uppercase'>
-                  <IconArrowRight className="mr-2" />
-                  Заказать услугу онлайн
-                </Button>
-                </Link>
+                  <Link href={link} target="_blank" rel="nofollow">
+                    <Button size='sm' variant="link" className='bg-[#0a8323] text-[12px] text-white uppercase'>
+                      <IconArrowRight className="mr-2" />
+                      Заказать услугу онлайн
+                    </Button>
+                  </Link>
                 )}
               </div>
             )
