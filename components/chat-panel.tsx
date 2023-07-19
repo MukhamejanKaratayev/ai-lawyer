@@ -5,8 +5,8 @@ import { PromptForm } from '@/components/prompt-form'
 import { ButtonScrollToBottom } from '@/components/button-scroll-to-bottom'
 import { IconArrowRight, IconRefresh, IconStop } from '@/components/ui/icons'
 import { FooterText } from '@/components/footer'
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
-import Dictaphone from './dictophone'
+// import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
+// import Dictaphone from './dictophone'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -34,12 +34,7 @@ export function ChatPanel({
   setInput,
   messages
 }: ChatPanelProps) {
-  const [link, setLink] = useState('')
-  const setLinkHandler = (text: string) => {
-    const urlRegex = /\((https?:\/\/[^\s]+)\)/;
-    const match = text.match(urlRegex);
-    if (match && match[1] && match[1].includes('services')) setLink(match[1]);
-  }
+
   useEffect(() => {
     if (!isLoading && messages?.length > 0) {
       console.log("Finished!!!");
@@ -51,12 +46,19 @@ export function ChatPanel({
       setLinkHandler(lastAssistantMessage.content);
 
       // Text-to-speech part
-      const utterance = new SpeechSynthesisUtterance(lastAssistantMessage.content);
-      utterance.lang = 'ru-RU'; // Set the language code for Russian
+      // const utterance = new SpeechSynthesisUtterance(lastAssistantMessage.content);
+      // utterance.lang = 'ru-RU'; // Set the language code for Russian
 
-      speechSynthesis.speak(utterance);
+      // speechSynthesis.speak(utterance);
     }
   }, [isLoading, messages]);
+  
+  const [link, setLink] = useState('')
+  const setLinkHandler = (text: string) => {
+    const urlRegex = /\((https?:\/\/[^\s]+)\)/;
+    const match = text.match(urlRegex);
+    if (match && match[1] && match[1].includes('services')) setLink(match[1]);
+  }
   return (
     <div className="fixed inset-x-0 bottom-0 bg-gradient-to-b from-muted/10 from-10% to-muted/30 to-50%">
       <ButtonScrollToBottom />

@@ -50,16 +50,16 @@ export function PromptForm({
     browserSupportsSpeechRecognition
   } = useSpeechRecognition()
 
-  if (!browserSupportsSpeechRecognition) {
-    return <span>Browser doesn't support speech recognition.</span>
-  }
-
   React.useEffect(() => {
     if (transcript) {
       setInput(transcript)
       // resetTranscript()
     }
-  }, [transcript])
+  }, [transcript, setInput])
+
+  if (!browserSupportsSpeechRecognition) {
+    return <span>Browser doesn't support speech recognition.</span>
+  }
 
   const startListening = () =>
     SpeechRecognition.startListening({ language: 'ru' })
