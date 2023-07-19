@@ -14,11 +14,11 @@ export const size = {
 export const contentType = 'image/png'
 
 const interRegular = fetch(
-  new URL('../../../assets/fonts/Inter-Regular.woff', import.meta.url)
+  '../../../assets/fonts/Inter-Regular.woff'
 ).then(res => res.arrayBuffer())
 
 const interBold = fetch(
-  new URL('../../../assets/fonts/Inter-Bold.woff', import.meta.url)
+  '../../../assets/fonts/Inter-Bold.woff'
 ).then(res => res.arrayBuffer())
 
 interface ImageProps {
