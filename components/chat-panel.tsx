@@ -6,7 +6,6 @@ import { ButtonScrollToBottom } from '@/components/button-scroll-to-bottom'
 import { IconArrowRight, IconRefresh, IconStop } from '@/components/ui/icons'
 import { FooterText } from '@/components/footer'
 // import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
-// import Dictaphone from './dictophone'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -52,7 +51,7 @@ export function ChatPanel({
       // speechSynthesis.speak(utterance);
     }
   }, [isLoading, messages]);
-  
+
   const [link, setLink] = useState('')
   const setLinkHandler = (text: string) => {
     const urlRegex = /\((https?:\/\/[^\s]+)\)/;
