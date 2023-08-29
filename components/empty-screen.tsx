@@ -188,4 +188,4 @@ export function EmptyScreen({ setInput }: Pick<UseChatHelpers, 'setInput'>) {
 // Чем отличается консолидированный закон от кодекса
 // как открыть компанию, как получиьб лицензию суд исп, адвокат, нотариус
 // https://prg.kz/
-// asfdadsf
+// asfdadsf sfg dfg dfg
