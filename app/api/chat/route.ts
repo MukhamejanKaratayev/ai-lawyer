@@ -37,7 +37,7 @@ export async function POST(req: Request) {
 
   // pinecone_small, zilliz_small
   // latest zilliz_small
-  const result = await fetch('http://127.0.0.1:8000/get_context?message=' + question + '&source=zilliz_laws')
+  const result = await fetch('http://3.101.85.74:8001/get_context_sources?message=' + question + '&source=zilliz_laws')
 
 
 
