@@ -37,12 +37,14 @@ export async function POST(req: Request) {
 
   // pinecone_small, zilliz_small
   // latest zilliz_small
-  const result = await fetch('http://3.101.85.74:8001/get_context_sources?message=' + question + '&source=zilliz_laws')
+  // http://3.101.85.74:8001/get_context?message=
+  const result = await fetch('http://localhost:8001/get_context_sources?message=' + question + '&source=zilliz_laws')
 
 
 
   if (!result.ok) {
     // This will activate the closest `error.js` Error Boundary
+    console.log(result)
     throw new Error('Failed to fetch data')
   }
   const response = await result.json() as ContextResponse;
