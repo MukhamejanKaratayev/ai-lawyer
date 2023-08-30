@@ -38,12 +38,10 @@ export async function POST(req: Request) {
   // pinecone_small, zilliz_small
   // latest zilliz_small
   // http://3.101.85.74:8001/get_context?message=
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
   const result = await fetch('http://3.101.85.74/get_context_sources?message=' + question + '&source=zilliz_laws')
-
-
-
+  
   if (!result.ok) {
-    // This will activate the closest `error.js` Error Boundary
     console.log(result)
     throw new Error('Failed to fetch data')
   }
