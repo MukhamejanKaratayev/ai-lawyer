@@ -38,8 +38,8 @@ export async function POST(req: Request) {
   // pinecone_small, zilliz_small
   // latest zilliz_small
   // http://3.101.85.74:8001/get_context?message=
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-  const result = await fetch('http://18.144.49.12/get_context_sources?message=' + question + '&source=zilliz_laws')
+
+  const result = await fetch('https://18.144.49.12/get_context_sources?message=' + question + '&source=zilliz_laws')
   
   if (!result.ok) {
     console.log(result)
